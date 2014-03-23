@@ -35,8 +35,6 @@ describe User do
 	game	
     end
 
-
-
     it "user is an author of a game" do
 	expect(@user.is_author_of(game)).to be_true
     end
