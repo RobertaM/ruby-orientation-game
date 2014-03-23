@@ -31,16 +31,6 @@ describe Game do
 	@game.complexity = 1
 	expect(@game).to_not be_complex
    end
-
-   let(:game) do
-        @game = Game.new
-        @game.name = "HITMEN"
-        @game.complexity = 0
-        @game.information = "LEts do this"
-        @game.start_time = Time.new() + (24*60*60)
-        @game.end_time = Time.new() + (48*60*60)
-        @game
-    end
 	
     it "is a valid game" do
 	expect(@game).to be_valid
