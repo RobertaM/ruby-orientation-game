@@ -21,8 +21,10 @@ class Game
   end
 
   def complex?
-    if @complexity == 0
+    if @complexity < 7
       return false
+    else
+      return true
     end
   end
   

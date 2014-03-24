@@ -23,11 +23,13 @@ describe User do
     @user.mail = "email@gmail.com"	
     expect(@user).to be_with_valid_email
   end
-
-  it "returns false if email is not valid" do
-    @user.mail = "email.com"
-    expect(@user).to_not be_with_valid_email
-  end
+  
+  describe "#with_valid_email?" do
+    it "returns false if email is not valid" do
+      @user.mail = "email.com"
+      expect(@user).to_not be_with_valid_email
+    end
+  end 
     
   let(:game) do
     game = Game.new
