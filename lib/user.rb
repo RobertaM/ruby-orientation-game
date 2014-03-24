@@ -17,7 +17,7 @@ class User
     end
   end 
 
-  def is_author_of game
+  def author_of game
     if game.author == self
       return true
     end

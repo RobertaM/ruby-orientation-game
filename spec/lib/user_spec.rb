@@ -41,6 +41,11 @@ describe User do
   end
 
   it "user is an author of a game" do
-    expect(@user.is_author_of(game)).to be_true
+    expect(@user.author_of(game)).to be_true
+  end
+
+  it "expect user not to be author of random new game" do
+    @game = Game.new  
+    expect(@user.author_of(@game)).to be_false
   end
 end
