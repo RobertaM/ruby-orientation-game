@@ -1,6 +1,7 @@
 require 'spec_helper'
 require 'game'
 require 'user'
+require 'level'
 describe Game do
   before :each do
     @user = User.new
@@ -10,6 +11,7 @@ describe Game do
     @game.information = "LEts do this"
     @game.start_time = Time.now + (24*60*60)
     @game.end_time = Time.now + (48*60*60)
+    @game.levels = []
   end	
 
   it "has a real game category by default" do
@@ -51,7 +53,7 @@ describe Game do
     @game.complexity = 1
     expect(@game).to_not be_complex
   end
-   
+
   it "expect game to not be complex when complexity >7" do
     @game.complexity = 7
     expect(@game).to be_complex
@@ -68,6 +70,7 @@ describe Game do
       expect(@game).to_not be_valid
     end
   end
+
   describe "#valid?" do
     it "returns false if game author is nil" do
       @game.author = nil
@@ -102,4 +105,22 @@ describe Game do
       expect(@game).to_not be_valid
     end 
   end  
+
+  let(:level) do  #new
+    level = Level.new
+    level.level_time = (60*60)
+    level.task = "to do some stuff"
+    level.answer = "ucanpass"
+    level  
+  end
+
+  it "cheks if level exists" do   #new
+    @game.levels.push(@level)
+    expect(@game.check_if_level_exists(@level)).to be_true
+  end
+
+  it "adds level to a game" do
+    expect(@game.add_level(@level)).to be_true
+  end
+
 end

@@ -1,9 +1,12 @@
 
 class Game
-  attr_accessor :name, :author, :category, :real, :available, :complexity, :information, :start_time, :end_time
+  attr_accessor :name, :author, :category, :real, :available, :complexity, :information, :start_time, :end_time, :players, :levels, :won
 
   def initialize
     @category = :real
+    @levels = []
+    @won = false
+    @players = []
   end
 
   def categorised?
@@ -45,5 +48,32 @@ class Game
     valid_end_time
 	
     return true
+  end
+
+  def check_if_level_exists level
+    if levels.include? level
+    return true
+    end
+  end 
+
+  def add_level level
+    @levels.push(level)
+    return true    
+  end
+
+  def add_team team 
+    players.push[@team]
+    return
+  end
+
+  def team_list_which_participate
+    if players.nil?
+      return false
+    else
+      for i in (0..players.length - 1)
+        puts players[i]
+      end
+      return true
+    end
   end
 end

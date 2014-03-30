@@ -1,6 +1,7 @@
 require 'spec_helper'
 require 'user'
 require 'game'
+require 'team'
 
 describe User do
   before :each do
@@ -39,6 +40,7 @@ describe User do
     game.information = "LEts do this"
     game.start_time = Time.now + (24*60*60)
     game.end_time = Time.now + (48*60*60)
+    game.won = false
     game	
   end
 
@@ -50,4 +52,35 @@ describe User do
     @game = Game.new  
     expect(@user.author_of(@game)).to be_false
   end
+
+
+  let(:team) do  #new
+    team = Team.new
+    team.name = "The Team"
+    team.number_of_games_played = 0
+    team.players = []
+    team
+  end
+
+  it "expect user to be captain of the team" do #new
+    team.captain = @user
+    expect(@user.captain_of(team)).to be_true
+  end
+
+  it "expect user not to be captain of another team" do #new
+    expect(@user.captain_of(team)).to be_false
+  end
+
+  it "gets points if game is passed" do
+    team.players.push(@user)
+    game.won = true
+    team.can_get_points_if_wins(game)
+    expect(@user.can_get_points(team)).to be_true
+  end
+
+ # it "won't get points if game is not won" do
+#    game.won = false
+ #   team.can_get_points_if_wins(game)
+ #   expect(@user.can_get_points(@team)).to be_false
+ # end
 end
