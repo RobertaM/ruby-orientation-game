@@ -63,10 +63,10 @@ class Game
 
   def add_team team 
     players.push[@team]
-    return
+    return true
   end
 
-  def team_list_which_participate
+  def teams_which_participate_in_a_game team
     if players.nil?
       return false
     else

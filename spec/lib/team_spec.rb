@@ -15,6 +15,7 @@ describe Team do
     @game.players = []
     @team.level_answers = []
     @game.levels = []
+    @game.won = false
    # @team.number_of_games_played = 0
   end
 
@@ -33,7 +34,6 @@ describe Team do
     @team.level_answers.push("Poteris")
     
     @game.add_level(@level)
-    
     @level = Level.new
     @level.answer = "haris"
     @game.add_level(@level)
@@ -42,6 +42,53 @@ describe Team do
     @level.answer = "Poteris"
     @game.add_level(@level)
     
-    expect(@team.can_pass_levels(@game)).to _be_true
+    expect(@team.can_pass_levels(@game)).to be_true
+  end
+
+  it "can't pass levels with incorrect codes" do
+    @team.level_answers.push("ushallpass")
+    @team.level_answers.push("Haris")
+
+    @game.add_level(@level)
+    @level = Level.new
+    @level.answer = "Kompas"
+    @game.add_level(@level)
+
+    expect(@team.can_pass_levels(@game)).to be_false
+  end
+  
+  it "wins game if all levels are passed" do
+    @level.passed = true
+    @game.add_level(@level)
+    
+    @level = Level.new
+    @level.passed = true
+    @game.add_level(@level)
+    
+    @level = Level.new
+    @level.passed = true
+    @game.add_level(@level)
+
+    expect(@team.can_win_game_if_levels_passed(@game)).to be_true
+  end
+
+  it "can't win a game if part of levels are not passed" do
+    @level.passed = true
+    @game.add_level(@level)
+    
+    @level = Level.new
+    @level.passed = false
+    @game.add_level(@level)
+    
+    expect(@team.can_win_game_if_levels_passed(@game)).to be_false
+  end
+  
+  it "can get points if game is won" do
+    @game.won  = true
+    expect(@team.can_get_points_if_wins(@game)).to be_true
+  end
+
+  it "cant get points if game is not won" do
+    expect(@team.can_get_points_if_wins(@game)).to be_false
   end
 end

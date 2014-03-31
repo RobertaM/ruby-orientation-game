@@ -2,6 +2,7 @@ require 'spec_helper'
 require 'game'
 require 'user'
 require 'level'
+require 'team'
 describe Game do
   before :each do
     @user = User.new
@@ -121,6 +122,17 @@ describe Game do
 
   it "adds level to a game" do
     expect(@game.add_level(@level)).to be_true
+  end
+
+  it "checks which teams do participate in a game" do
+    @team = Team.new
+    @team.name = "Hey"
+    @game.players.push(@team)
+    @team = Team.new
+    @team.name = "Aloha"
+    @game.players.push(@team)
+
+    expect(@game.teams_which_participate_in_a_game(@team)).to be_true
   end
 
 end

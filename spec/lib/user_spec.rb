@@ -78,9 +78,9 @@ describe User do
     expect(@user.can_get_points(team)).to be_true
   end
 
- # it "won't get points if game is not won" do
-#    game.won = false
- #   team.can_get_points_if_wins(game)
- #   expect(@user.can_get_points(@team)).to be_false
- # end
+  it "won't get points if game is not won" do
+    game.won = false
+    team.can_get_points_if_wins(game)
+    expect(@user.can_get_points(team)).to be_false
+  end
 end

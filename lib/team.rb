@@ -10,18 +10,18 @@ class Team
     end
   end
 
-  def can_pass_a_levels game  #pakeisti i last index
+  def can_pass_levels game  #pakeisti i last index
     for i in (0..game.levels.length - 1)
       if level_answers[i] == game.levels[i].answer
         game.levels[i].passed = true
       else
-        break
+        return false
       end
-    end
-    return true
+    end  
+    return true  
   end
   
-  def check_if_all_levels_passed game
+  def can_win_game_if_levels_passed game
     for i in (0..game.levels.length - 1)
       if game.levels[i].passed == false
         return false
@@ -41,7 +41,7 @@ class Team
   end
 
   def can_participate_in_a_game game
-    @game.push(self)
+    game.push(self)
     return true  
   end
 end
