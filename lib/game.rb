@@ -43,9 +43,6 @@ class Game
     if @category.nil?
       return false
     end
-    
-    valid_time
-    valid_end_time
 	
     return true
   end
@@ -66,7 +63,7 @@ class Game
     return true
   end
 
-  def teams_which_participate_in_a_game team
+  def teams_participaiting
     if players.nil?
       return false
     else
