@@ -132,7 +132,7 @@ describe Game do
     @team.name = "Aloha"
     @game.players.push(@team)
 
-    expect(@game.teams_participaiting).to be_true
+    expect(@game.participaiting_teams).to include(@game.players[0.1])
   end
 
 end

@@ -69,7 +69,7 @@ describe Team do
     @level.passed = true
     @game.add_level(@level)
 
-    expect(@team.can_win_game_if_levels_passed(@game)).to be_true
+    expect(@team.can_win_game(@game)).to be_true
   end
 
   it "can't win a game if part of levels are not passed" do
@@ -80,15 +80,15 @@ describe Team do
     @level.passed = false
     @game.add_level(@level)
     
-    expect(@team.can_win_game_if_levels_passed(@game)).to be_false
+    expect(@team.can_win_game(@game)).to be_false
   end
   
   it "can get points if game is won" do
     @game.won  = true
-    expect(@team.can_get_points_if_wins(@game)).to be_true
+    expect(@team.can_get_points(@game)).to be_true
   end
 
   it "cant get points if game is not won" do
-    expect(@team.can_get_points_if_wins(@game)).to be_false
+    expect(@team.can_get_points(@game)).to be_false
   end
 end

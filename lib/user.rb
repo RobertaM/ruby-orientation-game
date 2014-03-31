@@ -86,8 +86,8 @@ class User
   end
   
   def can_get_points team
-    for i in (0..team.players.length - 1)
-      if team.players[i] == self
+    team.players.each do |player|
+      if player == self
         player_points =+ team.points / team.players.length - 1
         return true
       end

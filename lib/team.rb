@@ -21,9 +21,9 @@ class Team
     return true  
   end
   
-  def can_win_game_if_levels_passed game
-    for i in (0..game.levels.length - 1)
-      if game.levels[i].passed == false
+  def can_win_game game
+    game.levels.each do |level|
+      if level.passed == false
         return false
       end
     end
@@ -32,7 +32,7 @@ class Team
     return true  
   end
 
-  def can_get_points_if_wins game
+  def can_get_points game
     if game.won == true
       @points =+10
       return true
@@ -40,7 +40,7 @@ class Team
     return false
   end
 
-  def can_participate_in_a_game game
+  def can_participate game
     game.push(self)
     return true  
   end

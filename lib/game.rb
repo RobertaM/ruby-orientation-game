@@ -63,14 +63,7 @@ class Game
     return true
   end
 
-  def teams_participaiting
-    if players.nil?
-      return false
-    else
-      for i in (0..players.length - 1)
-        puts players[i]
-      end
-      return true
-    end
+  def participaiting_teams
+    players 
   end
 end
