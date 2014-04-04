@@ -29,11 +29,27 @@ class Level
     end
   end
 
-  def task_is_defined 
+  def task_is_defined? 
     if task.nil?
       return false
     else
       return true
+    end
+  end
+
+  def prompts_is_defined
+    if prompts.nil?
+      return false
+    else
+      return true
+    end
+  end
+
+  def level_answer_is_defined
+    if answer.nil?
+      return true
+    else
+      return false
     end
   end
 end
