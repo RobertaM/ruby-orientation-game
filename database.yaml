@@ -1,0 +1,45 @@
+--- 
+:users: 
+- &id001 !ruby/object:User 
+  address: Vilnius
+  mail: roberta@gmail.com
+  name: Roberta
+  nickname: AvCan
+  number: "123456789"
+  password: miegas
+  player_points: 0
+  surname: M
+:games: 
+- !ruby/object:Game 
+  author: *id001
+  available: true
+  category: :real
+  complexity: "1"
+  information: easy game for beginers
+  levels: 
+  - !ruby/object:Level 
+    answer: "3"
+    bonus: 0
+    comment: try to solve it
+    level_name: pirmas lygis
+    level_time: "10"
+    passed: false
+    prompts: []
+
+    task: 1+2
+  - !ruby/object:Level 
+    answer: "1"
+    bonus: 0
+    comment: try to solve it
+    level_name: antras lygis
+    level_time: "10"
+    passed: false
+    prompts: []
+
+    task: 2-1
+  name: pirmas zaidimas
+  players: []
+
+  won: 
+:teams: []
+

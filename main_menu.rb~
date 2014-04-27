@@ -1,0 +1,56 @@
+require_relative 'lib/team'
+require_relative 'lib/game'
+require_relative 'lib/user'
+show_menu
+class Main_menu
+  
+  def intialize 
+  	show_menu
+  end
+
+  def navigate
+    show_menu
+  end
+
+  def show_menu
+    puts "
+   	  Options:
+        1) Register
+        2) Login
+		    3) Log out
+		    4) Create game
+		    5) Create team
+		    6) Show games list
+		    7) Show teams list
+		    8) Show users list"
+
+    case gets.strip
+      when "1"
+  	    register
+  	    show_menu
+      when "2"
+  	    login
+  	    show_menu
+      when "3"
+  	    logout
+        show_menu
+      when "4"
+  	    create_game
+  	    show_menu
+      when "5"
+  	    create_team
+  	    show_menu
+      when "6"
+  	    games_list
+  	    show_menu
+      when "7"
+  	    teams_list
+  	    show_menu
+      when "8"
+  	    users_list
+  	    show_menu
+      else
+  	    puts "we dont have such option"
+      end
+    end    	
+end

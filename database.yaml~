@@ -1,0 +1,102 @@
+--- 
+:users: 
+- !ruby/object:User 
+  address: Vilnius
+  mail: ""
+  name: Roberta
+  nickname: AvCan
+  number: "8123432121"
+  password: saldumynai
+  surname: Matulenaite
+- !ruby/object:User 
+  address: Vilno
+  mail: romas@gmail.com
+  name: Romas
+  nickname: Thom
+  number: "123456789"
+  password: aloha
+  surname: Ramanauskas
+- !ruby/object:User 
+  address: Kaunas
+  mail: some@gmail.com
+  name: Vilius
+  nickname: VEMME
+  number: "123456789"
+  password: pampam
+  player_points: 0
+  surname: Mielakauskas
+- &id001 !ruby/object:User 
+  address: rama
+  mail: rama@gmail.com
+  name: rama
+  nickname: rama
+  number: "123456789"
+  password: rama
+  player_points: 0
+  surname: rama
+:games: 
+- !ruby/object:Game 
+  available: true
+  category: :real
+  complexity: asdff
+  information: asd
+  levels: []
+
+  name: assdfg
+  players: []
+
+  won: 
+- !ruby/object:Game 
+  available: true
+  category: :real
+  complexity: "1"
+  information: food
+  levels: []
+
+  name: name
+  players: []
+
+  won: 
+:teams: 
+- !ruby/object:Team 
+  active_team: []
+
+  captain: []
+
+  level_answers: []
+
+  name: sadsads
+  number_of_games_played: 0
+  passive_team: []
+
+  players: []
+
+  points: 0
+- !ruby/object:Team 
+  active_team: []
+
+  captain: []
+
+  level_answers: []
+
+  name: such team
+  number_of_games_played: 0
+  passive_team: []
+
+  players: 
+  - 
+  points: 0
+- !ruby/object:Team 
+  active_team: []
+
+  captain: []
+
+  level_answers: []
+
+  name: omg
+  number_of_games_played: 0
+  passive_team: []
+
+  players: 
+  - *id001
+  points: 0

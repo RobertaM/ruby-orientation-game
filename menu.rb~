@@ -1,0 +1,18 @@
+require_relative 'menu'
+class Menu 
+  def show_menu
+
+    puts "
+   	  Options:
+        1) Register
+        2) Login
+        3) Log out
+        4) Create game
+        5) Create team
+        6) Show games list
+        7) Show teams list
+        8) Show users list"
+
+	@main.choose_options gets.strip
+  end
+end

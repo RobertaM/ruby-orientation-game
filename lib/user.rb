@@ -1,8 +1,13 @@
 class User
-  attr_accessor :nickname, :name, :surname, :address, :player_points, :mail, :number, :captain, :team, :team_name
+  attr_accessor :nickname, :name, :surname, :address, :player_points, :mail, :number, :captain, :team, :team_name, :password
+
+  class << self
+    attr_accessor :logged_in_as
+  end
 
   def initialize()
     game = Game.new
+    player_points = 0
   end
   
   def have_a_nickname?
@@ -93,6 +98,14 @@ class User
       end
     end
     return false
+  end
+
+  def login 
+    User.logged_in_as = self
+  end
+
+  def logout
+    User.logged_in_as = nil
   end
 end
 
