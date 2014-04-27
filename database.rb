@@ -19,12 +19,12 @@ class Database
   	create
 
   	begin
-  	  #data = YAML.load(File.read(DATABASE))
+  	  data = YAML.load(File.read(DATABASE))
   	end
 
-  	#@users = data[:users] if not data[:users].nil?
-  	#@games = data[:games] if not data[:games].nil?
-  	#@teams = data[:teams] if not data[:teams].nil?
+  	@users = data[:users] if not data[:users].nil?
+  	@games = data[:games] if not data[:games].nil?
+  	@teams = data[:teams] if not data[:teams].nil?
   	return true
   end
 

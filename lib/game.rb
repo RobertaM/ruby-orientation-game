@@ -1,12 +1,13 @@
 
 class Game
-  attr_accessor :name, :author, :category, :real, :points, :available, :complexity, :information, :start_time, :end_time, :players, :levels, :won 
+  attr_accessor :name, :author, :category, :real, :points, :available, :complexity, :information, :start_time, :end_time, :players, :levels, :won , :passed
 
   def initialize
     @category = :real
     @levels = []
     @won = false
     @players = []
+    @passed = []
   end
 
   def categorised?
