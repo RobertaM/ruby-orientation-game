@@ -1,27 +1,21 @@
 class Level
-  attr_accessor :level_name, :level_time, :comment, :task,  :prompts, :bonus, :answer, :passed
+  attr_accessor :level_name, :level_time, :comment, :task,  :prompts, :bonus, :answer, :passed, :time
 
   def initialize
     @bonus = 0;
     @passed = false
     @prompts = []
   end  
-    
-  def valid_level_time
 
-  end
-
-  def valid_spent_time_in_level
-
-  end
-
-  def named?
+  def named
     if level_name.nil?
       return false
-    end
+    else
       return true
     end
-  def commented?
+  end
+
+  def commented
     if comment.nil?
       return false
     else
@@ -29,7 +23,7 @@ class Level
     end
   end
 
-  def task_is_defined? 
+  def task_is_defined 
     if task.nil?
       return false
     else
@@ -45,11 +39,11 @@ class Level
     end
   end
 
-  def level_answer_is_defined
+  def answer_is_defined
     if answer.nil?
-      return true
-    else
       return false
+    else
+      return true
     end
   end
 end

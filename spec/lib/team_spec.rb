@@ -16,7 +16,7 @@ describe Team do
     @team.level_answers = []
     @game.levels = []
     @game.won = false
-   # @team.number_of_games_played = 0
+  # @team.number_of_games_played = 0
   end
 
   it "expects that it can participate in a game" do
@@ -91,4 +91,42 @@ describe Team do
   it "cant get points if game is not won" do
     expect(@team.can_get_points(@game)).to be_false
   end
+
+  it "expect team to have points" do
+    @team.points = 1
+    expect(@team).to be_with_points
+  end
+
+  it "expect team cant have negative point value" do
+    @team.points = -1
+    expect(@team).to_not be_with_points
+  end
+
+  it "expect it returns false if there is no members" do
+    expect(@team).to_not be_with_team_members
+  end
+
+  it "expect team to have members" do
+    @team.players = ['gendalf', 'thomas']
+    expect(@team).to be_with_team_members
+  end
+
+  it "expect team to have a name" do
+    @team.name = "lord of the rings"
+    expect(@team).to be_with_name
+  end
+
+  it "expect returns false if there is no name" do
+    expect(@team).to_not be_with_name
+  end
+
+  it "expect team has a captain" do
+    @team.captain = "captain"
+    expect(@team).to be_with_captain
+  end
+
+  it "expect it returns false if there is no captain" do
+    expect(@team).to_not be_with_captain
+  end
+
 end
