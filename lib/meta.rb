@@ -20,7 +20,7 @@ class Meta
 
 	def self.find_login_info(nickname, password)
 
-	  @units.each do |unit|
+	 @units.each do |unit|
 	  	if(nickname == unit.nickname && password == unit.password)
           unit.login
           puts "found"
@@ -35,7 +35,9 @@ class Meta
 	end
 
 	def save_data
-      units = self.class.insert
-      units.push(self)
+      	units = self.class.insert
+      if !units.include?(self)
+      	units.push(self)
+  	  end
     end
 end

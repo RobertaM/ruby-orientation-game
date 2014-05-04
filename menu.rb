@@ -115,6 +115,7 @@ attr_accessor :database
 
     users = User.load_all
     users.each do |user|
+      puts user.nickname
     if(nickname == user.nickname)
       puts "user already exists, try again"
       return
@@ -177,7 +178,6 @@ attr_accessor :database
       nickname = get_input
       print "Your password: "
       password = get_input
-
       user = User.find_login_info(nickname, password)
 
       if (user)
@@ -185,6 +185,7 @@ attr_accessor :database
       else
         puts "there is no such user"
       end 
+
     else
       puts "u are already logged in"
     end
@@ -214,9 +215,7 @@ attr_accessor :database
       team.captain = User.logged_in_as
       team.players.push(User.logged_in_as)
       User.logged_in_as.team = team
-      $database.teams.push(team)
-
-      $database.save_data
+      team.save_data
     else
       puts "you have to login first"
     end
@@ -225,25 +224,28 @@ attr_accessor :database
   def add_members_to_a_team
     if (!User.logged_in_as.nil?)
       user = User.logged_in_as
+      
       if(!user.team.nil?)
-        $database.teams.each do |db_team|
+        teams = Team.load_all
+        teams.each do |db_team|
+      
         if (user.team == db_team)
           puts "which users do you want to add to team" 
-          users_list
+          list(User.load_all)
           index = gets.chomp.to_i
-          if $database.users.nil?
-            puts "there are no users"
-            break
-          elsif db_team.players.include? $database.users[index-1]
+          if db_team.players.include? User.load_one(index)
+            puts User.load_one(index).name
             puts "you are already a member of the team"
             break
-          elsif $database.users.length < index
+          elsif User.load_all.length < index
             puts "there is no such member"     
           else
-            user = $database.users[index -1]
+            user = User.load_one(index)
+            puts user.nickname
             db_team.players.push(user)
             user.team = User.logged_in_as.team
-            $database.save_data
+            user.save_data
+            puts "succesfully added player to a team"
             break                 
           end
         end
@@ -259,11 +261,11 @@ attr_accessor :database
   def create_game
     if (!User.logged_in_as.nil?)
       print "What is your decided game name: "
-      name = gets.chomp
+      name = get_input
       print "Decided complexity 1-10 (1 - very easy, 10 - very hard)"
-      complexity = gets.chomp
+      complexity = get_input
       print "infromaition for players "
-      information = gets.chomp
+      information = get_input
 
       game = Game.new
     
@@ -278,48 +280,54 @@ attr_accessor :database
       game.author = User.logged_in_as
       forum = []
 
-      $database.games.push(game)
-      $database.save_data
+      game.save_data
     else
       puts "you have to login first"
     end
   end
 
   def add_level_to_game()
+    if (User.logged_in_as.nil?)
+      puts "Please login first"
+      return 
+    end
     puts "choose game"
-    games_list
-    game_index = gets.chomp.to_i
-    if $database.games[game_index-1].author != User.logged_in_as
+    list(Game.load_all)
+    index = gets.chomp.to_i
+    if Game.load_one(index).author != User.logged_in_as
       puts "you are not creator of a game, you cant modify a game"
       return
+    else
+      game = Game.load_one(index)
     end
-    if !$database.games.nil?
-      game = $database.games[game_index - 1]
+    if Game.load_all.length > 0
+      
       while true do
         level = Level.new
         print "what is your decided level name: "
-        level.level_name = gets.chomp
+        level.level_name = get_input
         print "Coments for a level: "
-        level.comment = gets.chomp
+        level.comment = get_input
         print "what is decided task for a level: "
-        level.task = gets.chomp
+        level.task = get_input
         print "what is level answer: "
-        level.answer = gets.chomp
+        level.answer = get_input
         
         game.levels.push(level)
-        $database.save_data    
+        game.save_data
+
         while true
           print "do you want to add more levels? 1-yes, 0- no: "
           more = gets.strip
-            if more == "0"
-              return
-            elsif more == "1"
-              puts "adding more levels"
-              break;
-            else
-              puts "no such option please try again"
-            end
+          if more == "0"
+            return
+          elsif more == "1"
+            puts "adding more levels"
+            break;
+          else
+            puts "no such option please try again"
           end
+        end
       end
     else
       puts "there is no created games"
@@ -338,10 +346,10 @@ attr_accessor :database
     end
 
     puts "in which game you want to paricipate"
-    games_list
-    which_game = gets.chomp.to_i
+    list(Game.load_all)
+    which = gets.chomp.to_i
     index = 0
-    game = $database.games[which_game - 1]
+    game = Game.load_one(which)
     if (game.levels.nil?)
       puts "game dont have levels yet, you cant participate"
     end
@@ -366,7 +374,6 @@ attr_accessor :database
     else
       puts "sorry game is already passed"
     end
-
   end
 
   def list units
@@ -390,8 +397,8 @@ attr_accessor :database
 
   def not_logged_in
     if(!User.logged_in_as)
-        puts "please login first"
-      return true
+      puts "please login first"
+      show
     end 
   end
 
@@ -445,8 +452,7 @@ attr_accessor :database
   end
 
   def write_forum_message
-    logged_in 
-
+    not_logged_in
     puts "for which game you want to write forum mesage?"
     game = choose_one(Game)
 
@@ -457,14 +463,13 @@ attr_accessor :database
     message.push(forum_msg)
     message.push(msg_author)
     game.forum.push(message)
-    $database.save_data
+    game.save_data
   end
 
   def read_forum_messages
+    not_logged_in
     puts "Which game messages do you want to read"
-    games_list
-    which_game = gets.chomp.to_i
-    game = $database.games[which_game - 1]
+    game = choose_one(Game)
     game.forum.each do |forum|
       puts "game comments: #{forum[0]}, by author: #{forum[1]}" 
     end
