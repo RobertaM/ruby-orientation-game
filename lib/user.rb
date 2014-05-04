@@ -1,4 +1,5 @@
-class User
+require_relative 'meta'
+class User < Meta
   attr_accessor :nickname, :name, :surname, :address, :player_points, :mail, :number, :captain, :team, :team_name, :password
 
   class << self
@@ -10,72 +11,29 @@ class User
     player_points = 0
   end
   
-  def have_a_nickname?
-    if @nickname.nil?
+  def attribute_is_not_empty attribute
+    if @attribute.nil?
       return false
     else
       return true
     end
   end
-
-  def have_a_name?
-    if @name.nil?
-      return false
-    else
-      return true
-    end
-  end
-  
-  def have_a_surname?
-    if @surname.nil?
-      return false
-    else
-      return true
-    end
-  end
-
-  def have_an_address 
-    if @address.nil?
-      return false
-    else
-      return true
-    end
-  end
-
-  def have_a_number
-    if @number.nil?
-      return false
-    else
-      return true
-    end
-  end
-  def with_player_points?
-    if @player_points >= 0
-      return true
-    end
-  end    
     
-  def with_valid_email?
-    if @mail.include? '@'
+  def with_valid_email mail
+    if mail.include? '@'
       return true
+    else
+      return false
     end
   end 
 
-  def have_a_team?
-    if @team.nil?
-      return false
-    else
-      return true
-    end
-  end
-
   def user_have_a_team_with_a_name team
-    if have_a_team
-      @team = team.name
-      return true
-    else
-      return false
-    end
+ #   if have_a_team
+ #     @team = team.name
+ #     return true
+ #   else
+ #     return false
+ #   end
   end
 
   def author_of game
@@ -107,5 +65,6 @@ class User
   def logout
     User.logged_in_as = nil
   end
+
 end
 

@@ -1,4 +1,5 @@
-class Team
+require_relative 'meta'
+class Team < Meta
   attr_accessor :name, :players, :number_of_games_played, :active_team, :passive_team, :captain, :level_answers, :points
 
   def initialize

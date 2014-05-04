@@ -1,4 +1,5 @@
-class Forum_message
+require_relative 'meta'
+class Forum_message < Meta
   attr_accessor  :message
   
   def send_message

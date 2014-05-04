@@ -2,36 +2,29 @@ require_relative 'lib/user'
 require_relative 'lib/game'
 require_relative 'lib/team'
 require_relative 'lib/level'
+require_relative 'lib/forum_message'
 require 'yaml'
 
 DATABASE = './database.yaml'
 
 class Database
-  attr_accessor :users, :games, :teams
-  
-  def create
-    @users = []
-    @games = []
-    @teams = []
-  end
-
   def load_data
-  	create
 
   	begin
   	  data = YAML.load(File.read(DATABASE))
   	end
 
-  	@users = data[:users] if not data[:users].nil?
-  	@games = data[:games] if not data[:games].nil?
-  	@teams = data[:teams] if not data[:teams].nil?
-  	return true
+    User.load_data(data[:users])
+    Game.load_data(data[:games])
+    Team.load_data(data[:teams])
+    Forum_message.load_data(data[:messages])
   end
 
   def save_data
   	File.open(DATABASE, 'w') do |database|
-  	data = {users: @users, games: @games, teams: @teams}
-  	database.write(data.to_yaml)
+  	  data = {users: User.insert, games: Game.insert, teams: Team.insert, messages: Forum_message.insert}
+  	  database.write(data.to_yaml)
+      puts "wrote smthg"
     end
   end
 end

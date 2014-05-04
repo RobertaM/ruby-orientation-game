@@ -6,9 +6,14 @@ require_relative 'lib/user'
 require_relative 'lib/level'
 require_relative 'lib/forum_message'
 
-$database = Database.new
-$database.load_data
 class Menu 
+
+attr_accessor :database
+
+  def initialize()
+    @database = Database.new
+    @database.load_data
+  end
 
   def show 
   puts "
@@ -50,7 +55,7 @@ class Menu
         see_games_informaition
         show
       when "7"
-        see_teams_information
+        see_teams_information(0)
         show
       when "8"
         see_users_informaition
@@ -68,7 +73,7 @@ class Menu
         add_members_to_a_team
         show
       when "13"
-        my_team
+        see_teams_information(1)
         show
       when "14"
         write_forum_message
@@ -76,6 +81,8 @@ class Menu
       when "15"
         read_forum_messages
         show
+      when "16"
+        exit_program
       else
         puts "we dont have such option"
         show
@@ -87,6 +94,7 @@ class Menu
       input = gets.chomp
       if input.empty?
         puts "Input is empty please, write something"
+        return false
       else 
         return input
       end
@@ -94,19 +102,25 @@ class Menu
   end
 
   def register 
+    
     if (!User.logged_in_as.nil?)
       puts "You are logged in, please log out so you could register"
       return
     end
 
+    user = User.new
+
     print "What is your decided nickname: "
     nickname = get_input
-    $database.users.each do |user|
+
+    users = User.load_all
+    users.each do |user|
     if(nickname == user.nickname)
       puts "user already exists, try again"
       return
       end 
     end
+
     print "What is your full name: "
     name = get_input
     print "What is your surname "
@@ -115,8 +129,16 @@ class Menu
     address = get_input 
     print "What is your phone number: "
     phone = get_input
-    print "What is your email address: "
-    mail = get_input 
+    while true
+      print "What is your E-mail address: "
+      mail = get_input
+      if user.with_valid_email(mail)
+        break
+      else
+        puts "E-mail is not valid please try again"
+      end
+    end 
+
     print "What is your decided password: "
     password = get_input
     print "Please repeat your password: "
@@ -134,7 +156,6 @@ class Menu
       end
     end
 
-    user = User.new
     user.nickname = nickname
     user.name = name
     user.surname = surname
@@ -143,11 +164,10 @@ class Menu
     user.mail = mail
     user.password = password
     user.player_points = 0
+    puts user.name
+    user.save_data
 
-    $database.users.push(user)
-    $database.save_data
-
-    puts "registraition is succesful"
+    puts "registration is succesful"
   end
 
   def login
@@ -158,16 +178,15 @@ class Menu
       print "Your password: "
       password = get_input
 
-      $database.users.each do |user|
-        if(nickname == user.nickname && password == user.password)
-          user.login
-          puts "logged in as: " + user.nickname
-        else
-          puts "there is no such user"
-        end 
-      end
+      user = User.find_login_info(nickname, password)
+
+      if (user)
+        puts "logged in as: " + User.logged_in_as.nickname
+      else
+        puts "there is no such user"
+      end 
     else
-      puts "you are already logged in"
+      puts "u are already logged in"
     end
   end
 
@@ -350,88 +369,57 @@ class Menu
 
   end
 
-
-  def games_list
+  def list units
     index = 0
-    $database.games.each do |game|
-      puts "#{index + 1}) game name: #{game.name},  author: #{game.author.name}" 
+    units.each do |unit|
+      puts "#{index + 1}) #{unit.name}"
       index = index + 1
     end
   end
 
-  def levels_list
-    games_list
-    which_game = gets.chomp.to_i
-    index = 0
-    game = $database.games[which_game -1]
-    game.levels.each do |level|
-      puts "#{index + 1}) #{level.level_name}"
-      index = index + 1
-    end
-  end
-  
-  def users_list
-    index = 0
-    $database.users.each do |user|
-      puts "#{index + 1}) #{user.nickname}"
-      index = index + 1
-    end
-  end
-
-  def teams_list
-    index = 0
-    $database.teams.each do |team|
-      puts "#{index + 1}) #{team.name}"
-      index = index + 1
-    end
-  end
-
-  def see_teams_information
-    puts "choose team"
-    teams_list
-    puts "see information of team: "
+  def choose_one which
+    units = which.load_all    
+    list(units)
+    
+    puts "Choose one: "
     index = gets.chomp.to_i
-    if $database.teams.nil?
-      puts "there is no teams"
-    elsif $database.teams.length < index
-      puts "team does not exist"
-    else
-      team = $database.teams[index - 1]
-      puts "teams name #{team.name}"
-      puts "teams members : " 
-      team.players.each do |player| 
-        puts player.nickname 
-      end
-    end
+    unit = which.load_one(index)
+    
+    return unit 
   end
 
-  def my_team
-    if (User.logged_in_as.nil?)
-      puts "you have to login first"
+  def not_logged_in
+    if(!User.logged_in_as)
+        puts "please login first"
+      return true
+    end 
+  end
+
+  def see_teams_information which
+    if not_logged_in
       return
     end
-    $database.teams.each do |team|
-      if (team == User.logged_in_as.team)
-        puts "teams name #{team.name}"
-        puts "teams members : " 
-        team.players.each do |player| 
-          puts player.nickname 
-        end
-      end
+
+    if (which == 0)
+      team = choose_one(Team)
+    else 
+      team = User.logged_in_as.team
+    end
+
+    if team == false
+      puts "there is no such team"
+    else
+      puts "teams name #{team.name}"
+      puts "teams members : " 
+      list(team.players)
     end
   end
 
   def see_users_informaition
-    puts "choose user"
-    users_list
-    puts "see informaition of user"
-    index = gets.chomp.to_i
-    if $database.users.nil?
-      puts "there is no users"
-    elsif $database.users.length < index
-      puts "user does not exist"
+    user = choose_one(User) 
+    if user == false 
+      puts "no such user"
     else
-      user = $database.users[index - 1]
       puts "users nickname:  #{user.nickname}"
       puts "users name: #{user.name}"
       puts "users surname: #{user.surname}"
@@ -443,16 +431,10 @@ class Menu
   end
 
   def see_games_informaition
-    puts "choose game"
-    games_list
-    puts "see information of games"
-    index = gets.chomp.to_i
-    if $database.games.nil?
-      puts "there is no games"
-    elsif $database.games.length < index
+    game = choose_one(Game) 
+    if game == false
       puts "game does not exist"
     else
-      game = $database.games[index -1]
       puts "game name: #{game.name}"
       puts "game author is: #{game.author.name}"
       puts "game category is: #{game.category}"
@@ -461,15 +443,13 @@ class Menu
       puts "game informaition: #{game.information}"
     end
   end
+
   def write_forum_message
-    if(!User.logged_in_as)
-      puts "please login first"
-      return
-    end  
+    logged_in 
+
     puts "for which game you want to write forum mesage?"
-    games_list
-    which_game = gets.chomp.to_i
-    game = $database.games[which_game - 1]
+    game = choose_one(Game)
+
     forum = Forum_message.new
     forum_msg = forum.send_message
     msg_author = User.logged_in_as.name
@@ -489,4 +469,10 @@ class Menu
       puts "game comments: #{forum[0]}, by author: #{forum[1]}" 
     end
   end
+
+  def exit_program
+    @database.save_data
+    exit!
+  end
+
 end

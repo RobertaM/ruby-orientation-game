@@ -9,6 +9,15 @@
   password: a
   player_points: 0
   surname: a
+- !ruby/object:User 
+  address: b
+  mail: b
+  name: b
+  nickname: b
+  number: b
+  password: b
+  player_points: 0
+  surname: b
 :games: 
 - !ruby/object:Game 
   author: *id001
@@ -28,4 +37,6 @@
 
   won: 
 :teams: []
+
+:messages: []
 

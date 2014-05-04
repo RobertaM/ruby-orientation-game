@@ -16,8 +16,6 @@
   category: :real
   complexity: a
   forum: 
-  - lalalalala
-  - labas
   - - lalalal
     - a
   information: a
@@ -30,4 +28,6 @@
 
   won: 
 :teams: []
+
+:messages: []
 

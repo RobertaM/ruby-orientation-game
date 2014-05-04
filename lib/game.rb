@@ -1,5 +1,5 @@
-
-class Game
+require_relative 'meta'
+class Game < Meta
   attr_accessor :name, :author, :category, :real, :points, :available, :complexity, :information, :start_time, :end_time, :players, :levels, :won , :passed, :forum
 
   def initialize
