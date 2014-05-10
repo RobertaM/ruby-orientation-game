@@ -32,7 +32,8 @@ attr_accessor :database
       12) Add users to a team
       13) Show my team information
       14) Write forum message
-      15) Read forum messages"        
+      15) Read forum messages
+      16) Quit"        
     puts ""
     print "Choose number: "
 	  case gets.strip
