@@ -14,17 +14,17 @@ class Database
   	  data = YAML.load(File.read(DATABASE))
   	end
 
-    User.load_data(data[:users])
-    Game.load_data(data[:games])
-    Team.load_data(data[:teams])
-    Forum_message.load_data(data[:messages])
+    User.load_record(data[:users])
+    Game.load_record(data[:games])
+    Team.load_record(data[:teams])
+    ForumMessage.load_record(data[:messages])
   end
 
   def save_data
   	File.open(DATABASE, 'w') do |database|
-  	  data = {users: User.insert, games: Game.insert, teams: Team.insert, messages: Forum_message.insert}
+  	  data = {users: User.insert, games: Game.insert, teams: Team.insert, messages: ForumMessage.insert}
   	  database.write(data.to_yaml)
-      puts "wrote smthg"
+      puts "data is saved to database"
     end
   end
 end

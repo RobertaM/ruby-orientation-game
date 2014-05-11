@@ -1,5 +1,5 @@
-require_relative 'meta'
-class User < Meta
+require_relative 'accesing_database'
+class User < AccessingDatabase
   attr_accessor :nickname, :name, :surname, :address, :player_points, :mail, :number, :captain, :team, :team_name, :password
 
   class << self
@@ -64,6 +64,17 @@ class User < Meta
 
   def logout
     User.logged_in_as = nil
+  end
+
+  def self.find_login_info(nickname, password)
+   @units.each do |unit|
+      if(nickname == unit.nickname && password == unit.password)
+        unit.login
+        puts "found"
+        return true
+      end
+    end
+    return false
   end
 
 end

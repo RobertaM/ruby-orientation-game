@@ -1,48 +1,16 @@
-require_relative 'meta'
-class Team < Meta
+require_relative 'accesing_database'
+class Team < AccessingDatabase
   attr_accessor :name, :players, :number_of_games_played, :active_team, :passive_team, :captain, :level_answers, :points
 
   def initialize
     @level_answers = []
   end
 
-  def with_name?
-    if name.nil?
-      return false
-    else
-      return true
-    end
-  end 
-
-  def with_team_members?
-    if players.nil?
-      return false
-    else
-      return true
-    end
-  end
-
-  def with_captain?
-    if captain.nil?
-      return false
-    else
-      return true
-    end
-  end
-
-  def with_points?
-    if points.nil? || points < 0
-      return false
-    else
-      return true
-    end
-  end
   def able_to_participate_in_a game 
   	if game.players.include? self
   		return true
     end
   end
-
 
   def can_pass_levels game  #pakeisti i last index
     for i in (0..game.levels.length - 1)

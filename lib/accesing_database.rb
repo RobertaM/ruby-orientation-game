@@ -1,7 +1,7 @@
-class Meta
+class AccessingDatabase
 	@units=[]
 
-	def self.load_data(units)
+	def self.load_record(units)
 		@units = units ? units : []
 	end
 
@@ -17,24 +17,11 @@ class Meta
 	  end
 	end
 
-
-	def self.find_login_info(nickname, password)
-
-	 @units.each do |unit|
-	  	if(nickname == unit.nickname && password == unit.password)
-          unit.login
-          puts "found"
-          return true
-    	end
-      end
-       return false
-	end
-
 	def self.insert
 		@units
 	end
 
-	def save_data
+	def save_record
       	units = self.class.insert
       if !units.include?(self)
       	units.push(self)

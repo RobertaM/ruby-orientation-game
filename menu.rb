@@ -457,8 +457,9 @@ attr_accessor :database
     puts "for which game you want to write forum mesage?"
     game = choose_one(Game)
 
-    forum = Forum_message.new
-    forum_msg = forum.send_message
+    forum = ForumMessage.new
+    puts "Write your comment about a game: "
+    forum_msg = get_input
     msg_author = User.logged_in_as.name
     message = []
     message.push(forum_msg)
