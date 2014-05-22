@@ -12,7 +12,7 @@ class User < AccessingDatabase
   end
   
   def attribute_is_not_empty attribute
-    if @attribute.nil?
+    if attribute.nil?
       return false
     else
       return true
@@ -27,13 +27,12 @@ class User < AccessingDatabase
     end
   end 
 
-  def user_have_a_team_with_a_name team
- #   if have_a_team
- #     @team = team.name
- #     return true
- #   else
- #     return false
- #   end
+  def with_player_points?
+    if player_points >= 0
+      return true
+    else
+      return false
+    end
   end
 
   def author_of game
@@ -60,10 +59,12 @@ class User < AccessingDatabase
 
   def login 
     User.logged_in_as = self
+    return true
   end
 
   def logout
     User.logged_in_as = nil
+    return true
   end
 
   def self.find_login_info(nickname, password)
@@ -77,5 +78,23 @@ class User < AccessingDatabase
     return false
   end
 
+  def check_if_exists nickname
+    users = User.load_all
+    users.each do |user|
+      puts user.nickname
+      if(nickname == user.nickname)
+        return true
+      end
+    end
+    return false
+  end
+  
+  def password_match password, password2
+    if (password != password2)
+      return false
+    else 
+      return true
+    end
+  end
 end
 

@@ -7,7 +7,7 @@
   nickname: a
   number: a
   password: a
-  player_points: 0
+  player_points: 3
   surname: a
   team: &id002 !ruby/object:Team 
     active_team: []
@@ -19,7 +19,7 @@
       nickname: c
       number: c
       password: c
-      player_points: 0
+      player_points: 3
       surname: c
       team: *id002
     level_answers: []
@@ -37,10 +37,20 @@
       nickname: b
       number: b
       password: b
-      player_points: 0
+      player_points: 3
       surname: b
       team: *id002
     - *id003
+    - &id005 !ruby/object:User 
+      address: r
+      mail: r@r.lt
+      name: r
+      nickname: r
+      number: r
+      password: r
+      player_points: 0
+      surname: r
+      team: *id002
     points: 0
 - *id004
 - *id001
@@ -53,6 +63,38 @@
   password: d
   player_points: 0
   surname: d
+- !ruby/object:User 
+  address: e
+  mail: e@e.lt
+  name: e
+  nickname: e
+  number: e
+  password: e
+  player_points: 0
+  surname: e
+- *id005
+- &id006 !ruby/object:User 
+  address: g
+  mail: g@gmail.com
+  name: g
+  nickname: g
+  number: g
+  password: g
+  player_points: 0
+  surname: g
+  team: &id009 !ruby/object:Team 
+    active_team: []
+
+    captain: *id006
+    level_answers: []
+
+    name: omg
+    number_of_games_played: 0
+    passive_team: []
+
+    players: 
+    - *id006
+    points: 0
 :games: 
 - !ruby/object:Game 
   author: *id003
@@ -77,12 +119,22 @@
     prompts: []
 
     task: 1+2
+  - !ruby/object:Level 
+    answer: "17"
+    bonus: 0
+    comment: try
+    level_name: somthing
+    passed: false
+    prompts: []
+
+    task: 9+8
   name: a
   passed: []
 
   players: []
 
-  won: 
+  points: 1
+  won: true
 - !ruby/object:Game 
   author: *id003
   available: true
@@ -98,7 +150,51 @@
 
   players: []
 
-  won: 
+  points: 0
+  won: true
+- !ruby/object:Game 
+  author: *id003
+  available: true
+  category: :real
+  complexity: 3
+  forum: []
+
+  information: none
+  levels: 
+  - !ruby/object:Level 
+    answer: "1"
+    bonus: 0
+    comment: "1"
+    level_name: "1"
+    passed: false
+    prompts: []
+
+    task: "1"
+  - !ruby/object:Level 
+    answer: "2"
+    bonus: 0
+    comment: "2"
+    level_name: "2"
+    passed: false
+    prompts: []
+
+    task: "2"
+  - !ruby/object:Level 
+    answer: "3"
+    bonus: 0
+    comment: "3"
+    level_name: "3"
+    passed: false
+    prompts: []
+
+    task: "3"
+  name: third
+  passed: []
+
+  players: []
+
+  points: 9
+  won: true
 :teams: 
 - !ruby/object:Team 
   active_team: []
@@ -127,10 +223,10 @@
   players: 
   - *id003
   points: 0
-- &id006 !ruby/object:Team 
+- &id008 !ruby/object:Team 
   active_team: []
 
-  captain: &id005 !ruby/object:User 
+  captain: &id007 !ruby/object:User 
     address: c
     mail: c@c.gmail.com
     name: c
@@ -139,7 +235,7 @@
     password: c
     player_points: 0
     surname: c
-    team: *id006
+    team: *id008
   level_answers: []
 
   name: horses
@@ -147,9 +243,23 @@
   passive_team: []
 
   players: 
-  - *id005
+  - *id007
   - *id003
   points: 0
 - *id002
+- !ruby/object:Team 
+  active_team: []
+
+  captain: *id005
+  level_answers: []
+
+  name: alfa
+  number_of_games_played: 0
+  passive_team: []
+
+  players: 
+  - *id005
+  points: 0
+- *id009
 :messages: []
 

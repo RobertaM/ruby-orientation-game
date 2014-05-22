@@ -6,5 +6,17 @@ class Level
     @passed = false
     @prompts = []
   end  
+
+  def passed?
+  	return passed
+  end
+
+  def valid_time?
+  	if time >=0
+  	  return true
+  	else
+  	  return false
+  	end
+  end
 end
 

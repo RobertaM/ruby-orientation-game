@@ -1,4 +1,3 @@
-require_relative 'mainmenu'
 require_relative 'database'
 require_relative 'lib/game'
 require_relative 'lib/team'
@@ -7,8 +6,8 @@ require_relative 'lib/level'
 require_relative 'lib/forum_message'
 
 class Menu 
-
 attr_accessor :database
+  
 
   def initialize()
     @database = Database.new
@@ -36,7 +35,7 @@ attr_accessor :database
       16) Quit"        
     puts ""
     print "Choose number: "
-	  case gets.strip
+	  case STDIN.gets.chomp
       when "1"
         register
         show
@@ -86,6 +85,7 @@ attr_accessor :database
         exit_program
       else
         puts "we dont have such option"
+        return false
         show
       end
   end
@@ -95,7 +95,6 @@ attr_accessor :database
       input = gets.chomp
       if input.empty?
         puts "Input is empty please, write something"
-        return false
       else 
         return input
       end
@@ -104,9 +103,9 @@ attr_accessor :database
 
   def register 
     
-    if (!User.logged_in_as.nil?)
+    if (User.logged_in_as)
       puts "You are logged in, please log out so you could register"
-      return
+      return false
     end
 
     user = User.new
@@ -114,14 +113,12 @@ attr_accessor :database
     print "What is your decided nickname: "
     nickname = get_input
 
-    users = User.load_all
-    users.each do |user|
-      puts user.nickname
-    if(nickname == user.nickname)
+
+    if(user.check_if_exists(nickname))
       puts "user already exists, try again"
       return
-      end 
-    end
+    end 
+  
 
     print "What is your full name: "
     name = get_input
@@ -147,7 +144,7 @@ attr_accessor :database
     check_password = get_input
     
     while true
-      if (password != check_password)
+      if (!user.password_match(password, check_password))
         puts "passwords dont match. Please try again"
         print "What is your decided password: "
         password = get_input
@@ -167,38 +164,41 @@ attr_accessor :database
     user.password = password
     user.player_points = 0
     puts user.name
-    user.save_data
+    user.save_record
 
     puts "registration is succesful"
   end
 
   def login
-    if (User.logged_in_as.nil?)
+    if (!User.logged_in_as)
       puts "Login information"
       print "Your username: "
       nickname = get_input
       print "Your password: "
       password = get_input
       user = User.find_login_info(nickname, password)
-
       if (user)
         puts "logged in as: " + User.logged_in_as.nickname
       else
         puts "there is no such user"
       end 
-
     else
-      puts "u are already logged in"
+      puts "you are already logged in"
+      return false
     end
   end
 
   def logout 
     User.logged_in_as.logout
+    if !User.logged_in_as
+      puts "logging out..."
+      return true
+    end
   end
 
   def create_team
-    if (!User.logged_in_as.nil?)
-      if (!User.logged_in_as.team.nil?)
+    if (User.logged_in_as)
+      if (User.logged_in_as.team)
         puts "you already have a team"
         return
       end
@@ -216,41 +216,38 @@ attr_accessor :database
       team.captain = User.logged_in_as
       team.players.push(User.logged_in_as)
       User.logged_in_as.team = team
-      team.save_data
+      team.save_record
     else
       puts "you have to login first"
     end
   end
 
   def add_members_to_a_team
-    if (!User.logged_in_as.nil?)
-      user = User.logged_in_as
-      
-      if(!user.team.nil?)
+    if (User.logged_in_as)
+      user = User.logged_in_as   
+      if(user.team)
         teams = Team.load_all
-        teams.each do |db_team|
-      
-        if (user.team == db_team)
+        players_team = User.logged_in_as.team.check_team(teams)
+        if (players_team)
           puts "which users do you want to add to team" 
           list(User.load_all)
           index = gets.chomp.to_i
-          if db_team.players.include? User.load_one(index)
+
+          if User.logged_in_as.team.already_a_member User.load_one(index)
             puts User.load_one(index).name
-            puts "you are already a member of the team"
-            break
+            puts "is already a member of the team"
           elsif User.load_all.length < index
             puts "there is no such member"     
           else
             user = User.load_one(index)
             puts user.nickname
-            db_team.players.push(user)
+            User.logged_in_as.team.players.push(user)
             user.team = User.logged_in_as.team
-            user.save_data
-            puts "succesfully added player to a team"
-            break                 
+            user.save_record
+            puts "succesfully added player to a team" 
           end
         end
-        end
+        
       else
         puts "create a team first"
       end
@@ -264,7 +261,7 @@ attr_accessor :database
       print "What is your decided game name: "
       name = get_input
       print "Decided complexity 1-10 (1 - very easy, 10 - very hard)"
-      complexity = get_input
+      complexity = gets.chomp.to_i
       print "infromaition for players "
       information = get_input
 
@@ -278,16 +275,17 @@ attr_accessor :database
       game.players = []
       game.levels =[]
       game.won = nil
+      game.points = 0
       game.author = User.logged_in_as
       forum = []
 
-      game.save_data
+      game.save_record
     else
       puts "you have to login first"
     end
   end
 
-  def add_level_to_game()
+  def add_level_to_game
     if (User.logged_in_as.nil?)
       puts "Please login first"
       return 
@@ -295,14 +293,14 @@ attr_accessor :database
     puts "choose game"
     list(Game.load_all)
     index = gets.chomp.to_i
-    if Game.load_one(index).author != User.logged_in_as
+    game = Game.load_one(index)
+    game_author = Game.load_one(index).author
+    puts game_author
+    if (!game.creator_of_game(game_author))
       puts "you are not creator of a game, you cant modify a game"
       return
-    else
-      game = Game.load_one(index)
     end
     if Game.load_all.length > 0
-      
       while true do
         level = Level.new
         print "what is your decided level name: "
@@ -315,18 +313,16 @@ attr_accessor :database
         level.answer = get_input
         
         game.levels.push(level)
-        game.save_data
+        game.save_record
 
         while true
           print "do you want to add more levels? 1-yes, 0- no: "
           more = gets.strip
-          if more == "0"
+          if (!game.add_levels(more))
             return
-          elsif more == "1"
+          else
             puts "adding more levels"
             break;
-          else
-            puts "no such option please try again"
           end
         end
       end
@@ -337,11 +333,12 @@ attr_accessor :database
 
   def play_game 
 
-    if (User.logged_in_as.nil?)
+    if (!User.logged_in_as)
       puts "you have to be logged in to play a game"
       return
     end
-    if (User.logged_in_as.team.nil?)
+
+    if (!User.logged_in_as.team)
       puts "you have to be in team to play game"
       return
     end
@@ -351,17 +348,20 @@ attr_accessor :database
     which = gets.chomp.to_i
     index = 0
     game = Game.load_one(which)
+
     if (game.levels.nil?)
       puts "game dont have levels yet, you cant participate"
     end
-    if(!game.won)
+
+    if(!game.won)      
       game.levels.each do |level|
         puts "#{level.level_name}"
         puts "#{level.task}"
         while true
           print "Please insert level answer: "
-          answer = gets.chomp
-          if (answer == level.answer)
+          answer = gets.chomp   
+          level_answer = game.check_level_is_correct(answer, level.answer)       
+          if level_answer
             puts "correct"
             index = index + 1
             break
@@ -371,9 +371,12 @@ attr_accessor :database
         end
       end
       puts "congratulaitions you passed a game"
-      game.won = true
-    else
-      puts "sorry game is already passed"
+     
+      if (!game.won)
+        game.won = true
+        game.points = game.give_points_to_winner(game.levels.length)
+        User.logged_in_as.team.can_get_points(game.points)
+      end
     end
   end
 
@@ -414,7 +417,7 @@ attr_accessor :database
       team = User.logged_in_as.team
     end
 
-    if team == false
+    if !team
       puts "there is no such team"
     else
       puts "teams name #{team.name}"
@@ -425,7 +428,7 @@ attr_accessor :database
 
   def see_users_informaition
     user = choose_one(User) 
-    if user == false 
+    if !user 
       puts "no such user"
     else
       puts "users nickname:  #{user.nickname}"
@@ -440,7 +443,7 @@ attr_accessor :database
 
   def see_games_informaition
     game = choose_one(Game) 
-    if game == false
+    if !game
       puts "game does not exist"
     else
       puts "game name: #{game.name}"
@@ -465,7 +468,7 @@ attr_accessor :database
     message.push(forum_msg)
     message.push(msg_author)
     game.forum.push(message)
-    game.save_data
+    game.save_record
   end
 
   def read_forum_messages

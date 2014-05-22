@@ -6,6 +6,7 @@ require 'level'
 
 describe Team do 
   before :each do
+    @user = User.new
     @team = Team.new
     @game = Game.new
     @level = Level.new
@@ -16,11 +17,13 @@ describe Team do
     @team.level_answers = []
     @game.levels = []
     @game.won = false
-  # @team.number_of_games_played = 0
+    User.logged_in_as = @user
+    @team.players = []
+    @team.number_of_games_played = 0
   end
 
   it "expects that it can participate in a game" do
-  	@game.players = [@team]
+  	@game.players.push(@team)
 	  expect(@team.able_to_participate_in_a(@game)).to be_true
   end
 
@@ -83,13 +86,15 @@ describe Team do
     expect(@team.can_win_game(@game)).to be_false
   end
   
-  it "can get points if game is won" do
-    @game.won  = true
-    expect(@team.can_get_points(@game)).to be_true
+  it "can get points if team gets winning points" do
+    @team.players.push(User.logged_in_as)
+    winner_points = 10
+    expect(@team.can_get_points(winner_points)).to be_true
   end
 
-  it "cant get points if game is not won" do
-    expect(@team.can_get_points(@game)).to be_false
+  it "cant get points if did not won a game" do
+    winner_points = 0
+    expect(@team.can_get_points(winner_points)).to be_false
   end
 
   it "expect team to have points" do
@@ -102,31 +107,13 @@ describe Team do
     expect(@team).to_not be_with_points
   end
 
-  it "expect it returns false if there is no members" do
-    expect(@team).to_not be_with_team_members
+  it "adds played game when its ended" do 
+    expect(@team.count_games_played(@game)).to be_true
   end
 
-  it "expect team to have members" do
-    @team.players = ['gendalf', 'thomas']
-    expect(@team).to be_with_team_members
-  end
-
-  it "expect team to have a name" do
-    @team.name = "lord of the rings"
-    expect(@team).to be_with_name
-  end
-
-  it "expect returns false if there is no name" do
-    expect(@team).to_not be_with_name
-  end
-
-  it "expect team has a captain" do
-    @team.captain = "captain"
-    expect(@team).to be_with_captain
-  end
-
-  it "expect it returns false if there is no captain" do
-    expect(@team).to_not be_with_captain
+  it "do not add games that are not played by a team" do
+    @game = nil
+    expect(@team.count_games_played(@gmae)).to be_false
   end
 
 end

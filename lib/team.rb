@@ -1,4 +1,5 @@
 require_relative 'accesing_database'
+require_relative 'user'
 class Team < AccessingDatabase
   attr_accessor :name, :players, :number_of_games_played, :active_team, :passive_team, :captain, :level_answers, :points
 
@@ -34,17 +35,57 @@ class Team < AccessingDatabase
     return true  
   end
 
-  def can_get_points game
-    if game.won == true
-      @points =+10
-      return true
+  def can_get_points won_points
+    team_points = won_points
+    players.each do |player| 
+      player.player_points = team_points / players.length
     end
-    return false
+    team_points = 0
+
+    if won_points > 0
+      return true
+    else 
+      return false
+    end
   end
 
   def can_participate game
     game.push(self)
     return true  
   end
-end
 
+  def with_points?
+    if points >= 0
+      return true
+    else 
+      return false
+    end
+  end
+  
+  def count_games_played game
+    if !game.nil?
+      number_of_games_played =+ 1
+      return true
+    else
+      return false
+    end
+  end
+
+  def check_team teams
+    teams.each do |db_team|
+      puts db_team
+      if (User.logged_in_as.team == db_team)
+        return db_team        
+      end
+    end
+    return false
+  end
+
+  def already_a_member member
+    if User.logged_in_as.team.players.include? member
+      return true
+    else
+      return false
+    end
+  end
+end

@@ -18,6 +18,11 @@ describe Game do
   it "has a real game category by default" do
     expect(@game.category).to eq(:real) 
   end
+
+  it "can have other type of category" do
+    @game.category = :points
+    expect(@game.category).to eq(:points)
+  end
   
   it "start date and time hasin't passed" do
     expect(@game.valid_time).to be_true
@@ -59,56 +64,9 @@ describe Game do
     @game.complexity = 7
     expect(@game).to be_complex
   end
-	
-  it "is a valid game" do
-    @game.author = @user
-    expect(@game).to be_valid
-  end
-  
-  describe "#valid" do
-    it "returns false if game category is dont exist" do
-      @game.category = nil
-      expect(@game).to_not be_valid
-    end
-  end
-
-  describe "#valid?" do
-    it "returns false if game author is nil" do
-      @game.author = nil
-      expect(@game).to_not be_valid
-    end
-  end
-
-  describe "#valid?" do
-    it "returns false if game name is nil" do
-      @game.name = nil
-      expect(@game).to_not be_valid
-    end    
-  end 
-  
-  describe "#valid?" do
-    it "returns false if start time already passed" do
-      @game.start_time = Time.now - (24*60*60)
-      expect(@game).to_not be_valid
-    end
-  end
- 
-  describe "#valid?" do
-    it "returns false if end time is less start time" do
-      @game.start_time = Time.now - (60*60)
-      expect(@game).to_not be_valid
-    end
-  end
-
-  describe "#valid?" do
-    it "returns false if end time is less then start time" do
-      @game.start_time = Time.now - (60*60)
-      expect(@game).to_not be_valid
-    end 
-  end  
 
   let(:level) do  #new
-    level = Level.new
+    @level = Level.new
     level.level_time = (60*60)
     level.task = "to do some stuff"
     level.answer = "ucanpass"
@@ -121,6 +79,7 @@ describe Game do
   end
 
   it "adds level to a game" do
+    @level = Level.new
     expect(@game.add_level(@level)).to be_true
   end
 
@@ -135,4 +94,21 @@ describe Game do
     expect(@game.participaiting_teams).to include(@game.players[0.1])
   end
 
+  it "is categorised" do
+    expect(@game).to_not be_nil
+  end
+
+  it "is not categorised" do
+    @game.category = nil
+    expect(@game.category).to be_nil
+  end
+
+  it "is valid" do
+    expect(@game).to_not be_nil
+  end
+
+  it "is not valid" do 
+    @game = nil
+    expect(@game).to be_nil
+  end
 end

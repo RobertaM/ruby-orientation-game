@@ -4,8 +4,7 @@ require_relative 'lib/user'
 require_relative 'database'
 require_relative 'menu'
 
-menu = Menu.new
-menu.show
-
-class Mainmenu
+class MainMenu
+@menu = Menu.new
+@menu.show
 end

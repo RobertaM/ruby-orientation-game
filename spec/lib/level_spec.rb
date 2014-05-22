@@ -13,49 +13,24 @@ describe Level do
     @level.comment = "be careful"
   end
 
-  it "is named" do
-	  expect(@level.named).to be_true
-  end
   
-  it "returns false is there is no level name" do
-    @level.level_name = nil
-    expect(@level.named).to_not be_true
+  it "by default is not passed" do
+    expect(@level).to_not be_passed
   end
 
-  it "is commented" do
-  	expect(@level.commented).to be_true
+  it "can pass level" do
+    @level.passed = true
+    expect(@level).to be_passed
   end
 
-  it "returns false if there is no comments for a level" do
-    @level.comment = nil
-    expect(@level.commented).to be_false
-  end  
-
-  it "task is defined" do
-    expect(@level.task_is_defined).to be_true
+  it "expects time to be valid" do
+    expect(@level).to be_valid_time
   end
 
-  it "return false if task is not defined" do
-    @level.task = nil
-    expect(@level.task_is_defined).to_not be_true
+  it "expects time cant be negative" do
+    @level.time = -1
+    expect(@level).to_not be_valid_time
   end
 
-  it "prompts are defined" do
-    expect(@level.prompts_is_defined).to be_true
-  end
-
-  it "returns false if prompts are not defined" do
-    @level.prompts = nil
-    expect(@level.prompts_is_defined).to_not be_true
-  end
-
-  it "has an answer" do
-    @level.answer = "shall pass"
-    expect(@level.answer_is_defined).to be_true
-  end 
-
-  it "has an answer" do
-    @level.answer = nil
-    expect(@level.answer_is_defined).to_not be_true
-  end 
+  
 end
