@@ -8,6 +8,7 @@ describe Team do
   before :each do
     @user = User.new
     @team = Team.new
+    @team.name = "Team"
     @game = Game.new
     @level = Level.new
     @level.passed = false
@@ -18,7 +19,9 @@ describe Team do
     @game.levels = []
     @game.won = false
     User.logged_in_as = @user
+    User.logged_in_as.team = @team
     @team.players = []
+    User.logged_in_as.team.players.push(@user)
     @team.number_of_games_played = 0
   end
 
@@ -116,4 +119,37 @@ describe Team do
     expect(@team.count_games_played(@gmae)).to be_false
   end
 
+  it "can participate in a game" do
+    @game = Game.new
+    expect(@team.can_participate(@game)).to be_true
+  end
+
+  it "cant participate if game do not exist" do
+    @game = nil
+    expect(@team.can_participate(@game)).to be_false
+  end
+
+  it "checks if team exsists" do
+    @teams = []
+    @teams.push(@team)
+    @team2 = Team.new
+    @teams.push(@team2)
+    @team3 = Team.new
+    @teams.push(@team3)
+    expect(@team.check_team(@teams)).to_not be_false
+  end
+  
+  it "returns false if team doesint exist" do
+    @teams = []
+    expect(@team.check_team(@teams)).to be_false
+  end
+ 
+  it "returns true if player is already in team" do
+    expect(@team.already_a_member(User.logged_in_as)).to be_true
+  end
+
+  it "returns false if player is not member of team" do
+    @user2 = User.new
+    expect(@team.already_a_member(@user2)).to be_false
+  end
 end

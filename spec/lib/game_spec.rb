@@ -6,6 +6,7 @@ require 'team'
 describe Game do
   before :each do
     @user = User.new
+    @team = Team.new
     @game = Game.new
     @game.name = "HITMEN"
     @game.complexity = 0
@@ -78,9 +79,18 @@ describe Game do
     expect(@game.check_if_level_exists(@level)).to be_true
   end
 
+  it "returns false if level do not exists" do   #new
+    expect(@game.check_if_level_exists(@level)).to be_false
+  end
+
   it "adds level to a game" do
     @level = Level.new
     expect(@game.add_level(@level)).to be_true
+  end
+
+  it "returns false if level do no exist" do
+    @level = nil
+    expect(@game.add_level(@level)).to be_false
   end
 
   it "checks which teams do participate in a game" do
@@ -94,13 +104,10 @@ describe Game do
     expect(@game.participaiting_teams).to include(@game.players[0.1])
   end
 
-  it "is categorised" do
-    expect(@game).to_not be_nil
-  end
 
   it "is not categorised" do
     @game.category = nil
-    expect(@game.category).to be_nil
+    expect(@game.categorised).to be_nil
   end
 
   it "is valid" do
@@ -111,4 +118,62 @@ describe Game do
     @game = nil
     expect(@game).to be_nil
   end
+
+  it "expects to be available" do
+    @game.available = true
+    expect(@game.valid).to be_true
+  end
+
+  it "gives points to game  winners" do
+    @levels_length = 3
+    @game.complexity = 1
+    expect(@game.give_points_to_winner(@levels_length)).should be > 0
+  end
+
+
+  it "gives points to game  winners" do
+    @levels_length = 0
+    @game.complexity = 1
+    expect(@game.give_points_to_winner(@levels_length)).should be == 0
+  end
+
+  it "returns true if user is creator of game" do
+    expect(@game.creator_of_game(User.logged_in_as)).to be_true 
+  end
+
+  it "returns false if user is not creator of game" do
+    @user2 = User.new
+    expect(@game.creator_of_game(@user2)).to be_false 
+  end
+
+  it "returns true if user asks to add more levels" do
+    expect(@game.add_levels("1")).to be_true
+  end
+
+  it "returns false if user do not ask to add more levels" do
+    expect(@game.add_levels("0")).to be_false
+  end
+
+  it "returns true if users provided answer is equal to given answer in system" do
+    expect(@game.check_level_is_correct("a", "a")).to be_true
+  end 
+
+  it "returns true if users provided answer is equal to given answer in system" do
+    expect(@game.check_level_is_correct("a", "b")).to be_false
+  end
+
+  it "returns true if team was added succesfully" do 
+    expect(@game.add_team(@team)).to be_true
+  end   
+
+  it "return false if team was not added succesfully" do
+    @team = nil
+    expect(@game.add_team(@team)).to be_false
+  end
+
+  it "expects to return participaiting teams" do
+    expect(@game.participaiting_teams).to_not be_nil
+  end 
+
+  
 end

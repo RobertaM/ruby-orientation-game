@@ -50,8 +50,12 @@ class Team < AccessingDatabase
   end
 
   def can_participate game
-    game.push(self)
-    return true  
+    if game
+      game.players.push(self)
+      return true
+    else 
+      return false
+    end
   end
 
   def with_points?

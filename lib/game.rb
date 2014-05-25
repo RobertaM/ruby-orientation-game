@@ -10,6 +10,7 @@ class Game < AccessingDatabase
     @passed = []
     @forum = []
     @available = false
+    @complexity = 1
   end
 
 
@@ -23,9 +24,6 @@ class Game < AccessingDatabase
     end
   end
 
-  def is_passed?
-    retun passed
-  end
 
   def complex?
     if @complexity < 7
@@ -70,7 +68,7 @@ class Game < AccessingDatabase
   end
 
   def participaiting_teams
-    players 
+    return players 
   end
 
   def give_points_to_winner levels_length
@@ -83,8 +81,6 @@ class Game < AccessingDatabase
   end
 
   def creator_of_game game_author
-    puts game_author
-    puts User.logged_in_as
     if game_author != User.logged_in_as
       return false
     else
