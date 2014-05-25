@@ -57,5 +57,6 @@ describe Menu do
    	  expect(@menu.play_game).to be_false
    	end
 
+    
 end
 
