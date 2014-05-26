@@ -4,7 +4,12 @@ require_relative 'lib/user'
 require_relative 'database'
 require_relative 'menu'
 
-class MainMenu
-@menu = Menu.new
-@menu.show
-end
+DATABASE = './database.yaml'
+database = Database.new
+database.load_data(File.open(DATABASE))
+    catch :quit do
+	   @menu = Menu.new
+       @menu.show
+    end
+  database.save_data(File.open(DATABASE, "w"))  
+

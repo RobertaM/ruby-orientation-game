@@ -19,6 +19,11 @@ describe User do
     @team.players.push(@user2)
   end
 
+  subject(:database) { Database.new }
+    before do
+     database.load_data(File.open('./database.yaml'))
+  end
+
   it "expects that attribute is not empty" do
     expect(@user.attribute_is_not_empty(@user.name)).to be_true
   end

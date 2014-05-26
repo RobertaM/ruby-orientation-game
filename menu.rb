@@ -7,12 +7,6 @@ require_relative 'lib/forum_message'
 
 class Menu 
 attr_accessor :database
-  
-
-  def initialize()
-    @database = Database.new
-    @database.load_data
-  end
 
   def show 
   puts "
@@ -114,7 +108,7 @@ attr_accessor :database
     nickname = get_input
 
 
-    if(user.check_if_exists(nickname))
+    if(User.check_if_exists(nickname))
       puts "user already exists, try again"
       return
     end 
@@ -480,9 +474,8 @@ attr_accessor :database
     end
   end
 
-  def exit_program
-    @database.save_data
-    exit!
+  def exit_program   
+    throw :quit
   end
 
 end

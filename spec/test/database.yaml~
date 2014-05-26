@@ -1,0 +1,123 @@
+--- 
+:users: 
+- &id003 !ruby/object:User 
+  address: a
+  mail: a
+  name: a
+  nickname: a
+  number: a
+  password: a
+  player_points: 3
+  surname: a
+  team: &id002 !ruby/object:Team 
+    active_team: []
+
+    captain: &id001 !ruby/object:User 
+      address: c
+      mail: c@c.lt
+      name: c
+      nickname: c
+      number: c
+      password: c
+      player_points: 3
+      surname: c
+      team: *id002
+    level_answers: []
+
+    name: alfa
+    number_of_games_played: 0
+    passive_team: []
+
+    players: 
+    - *id001
+    - &id004 !ruby/object:User 
+      address: b
+      mail: b
+      name: b
+      nickname: b
+      number: b
+      password: b
+      player_points: 3
+      surname: b
+      team: *id002
+    - *id003
+    - &id005 !ruby/object:User 
+      address: r
+      mail: r@r.lt
+      name: r
+      nickname: r
+      number: r
+      password: r
+      player_points: 0
+      surname: r
+      team: *id002
+    points: 0
+- *id004
+- *id001
+- !ruby/object:User 
+  address: d
+  mail: d@gmail.com
+  name: d
+  nickname: d
+  number: d
+  password: d
+  player_points: 0
+  surname: d
+- !ruby/object:User 
+  address: e
+  mail: e@e.lt
+  name: e
+  nickname: e
+  number: e
+  password: e
+  player_points: 0
+  surname: e
+- *id005
+- !ruby/object:User 
+  address: g
+  mail: g@gmail.com
+  name: g
+  nickname: g
+  number: g
+  password: g
+  player_points: 0
+  surname: g
+  team: !ruby/object:Team 
+    active_team: []
+
+- !ruby/object:User 
+  address: "1"
+  mail: 1@
+  name: "1"
+  nickname: "1"
+  number: "1"
+  password: "1"
+  player_points: 0
+  surname: "1"
+- !ruby/object:User 
+  name: Thom
+  nickname: nickname
+  password: password
+  surname: Phil
+:games: 
+- !ruby/object:Game 
+  author: *id003
+  available: true
+  category: :real
+  complexity: 1
+  forum: []
+
+  information: answer questions
+  levels: []
+
+  name: time
+  passed: []
+
+  players: []
+
+  points: 0
+  won: 
+:teams: []
+
+:messages: []
+

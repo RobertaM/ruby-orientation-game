@@ -5,26 +5,35 @@ require_relative 'lib/level'
 require_relative 'lib/forum_message'
 require 'yaml'
 
-DATABASE = './database.yaml'
-
 class Database
-  def load_data
-
-  	begin
-  	  data = YAML.load(File.read(DATABASE))
-  	end
-
-    User.load_record(data[:users])
-    Game.load_record(data[:games])
-    Team.load_record(data[:teams])
-    ForumMessage.load_record(data[:messages])
+  def self.change_format
+    {
+      users: User,
+      games: Game,
+      teams: Team,
+      messages: ForumMessage
+    }
   end
 
-  def save_data
-  	File.open(DATABASE, 'w') do |database|
-  	  data = {users: User.insert, games: Game.insert, teams: Team.insert, messages: ForumMessage.insert}
-  	  database.write(data.to_yaml)
-      puts "data is saved to database"
+  def load_data(file)
+    begin
+      file.rewind
+  	  data = YAML.load(file.read)
+    rescue
+      return false
+  	end
+
+    self.class.change_format.each do |key, value| 
+      value.load_record(data[key])
     end
+  end
+
+  def save_data(file)
+    data = {}
+  	self.class.change_format.each do |key, value|
+  	  data[key] = value.insert
+    end
+    file.write(data.to_yaml)
+    return true
   end
 end

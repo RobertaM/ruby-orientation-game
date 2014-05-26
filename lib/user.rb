@@ -69,7 +69,6 @@ class User < AccessingDatabase
   end
 
   def self.find_login_info(nickname, password)
-   puts @units
    @units.each do |unit|
       if(nickname == unit.nickname && password == unit.password)
         unit.login
@@ -82,7 +81,6 @@ class User < AccessingDatabase
 
   def self.check_if_exists nickname
     users = User.load_all
-    puts users
     users.each do |us|
       if(nickname == us.nickname)
         return true

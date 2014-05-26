@@ -11,9 +11,7 @@ class AccessingDatabase
 
 	def self.load_one(index)
 	  if !@units[index-1].nil?
-		return @units[index -1]
-	  else 
-	  	return false
+	  	return @units[index -1]
 	  end
 	end
 
@@ -22,7 +20,7 @@ class AccessingDatabase
 	end
 
 	def save_record
-      	units = self.class.insert
+      units = self.class.insert
       if !units.include?(self)
       	units.push(self)
   	  end
